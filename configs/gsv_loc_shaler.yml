@@ -1,0 +1,22 @@
+PATH:
+  PROCESSED_DB: '/mnt/storage/khiem_storage/ilim_data/processed_data/fifthcraig_grace/database'
+  PROCESSED_QUERY: '/mnt/storage/khiem_storage/ilim_data/processed_data/fifthcraig_grace/query'
+
+VDB_BUILDER:
+  output: 'exhaustive'
+
+EXTRACTOR:
+  'output': 'superpoint'
+  'model':
+    'name': 'superpoint'
+    'nms_radius': 3
+    'max_keypoints': 4096
+    'fix_sampling': True
+
+MATCHER:
+  'output': 'superglue'
+  'model':
+    'name': 'superglue'
+    'weights': 'outdoor'
+    'sinkhorn_iterations': 50
+
