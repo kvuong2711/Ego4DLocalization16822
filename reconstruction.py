@@ -124,9 +124,10 @@ def import_images(colmap_path, sfm_dir, image_dir, database_path,
 
     # Load intrinsic and define camera model
     camera_model = 'PINHOLE'
-    # intrinsics = np.loadtxt(root_dir / 'ba_output/camera_intrinsics.txt')
+    # intrinsics = np.loadtxt(sfm_dir / 'ba_output/camera_intrinsics.txt')
     # fx, fy, cx, cy = float(intrinsics[0]), float(intrinsics[1]), float(intrinsics[2]), float(intrinsics[3])
-    fx, fy, cx, cy = 960., 960., 960., 540.
+    # fx, fy, cx, cy = 960., 960., 960., 540.
+    fx, fy, cx, cy = 456.739, 456.646, 479.47, 274.714
     camera_params = [fx, fy, cx, cy]
 
     cmd = [

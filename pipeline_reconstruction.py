@@ -27,7 +27,8 @@ def setup_paths(cfg):
 
     # db paths
     db_recon_output_folder = Path(cfg.PATH.PROCESSED_DB) / cfg.PATH.RECON_OUTPUT
-    paths['db_color_folder'] = Path(cfg.PATH.PROCESSED_DB) / 'images'  # TODO: hardcoded
+    paths['db_root_folder'] = Path(cfg.PATH.PROCESSED_DB)
+    paths['db_color_folder'] = Path(cfg.PATH.PROCESSED_DB) / 'color'  # TODO: hardcoded
     paths['db_descriptor_folder'] = db_recon_output_folder / cfg.PATH.DESCRIPTOR_OUTPUT / cfg.EXTRACTOR.output
     paths['visual_db_folder'] = db_recon_output_folder / cfg.PATH.VDB_OUTPUT / (
             cfg.VDB_BUILDER.output + '_' + cfg.EXTRACTOR.output)
@@ -47,42 +48,42 @@ def main(cfg):
     setup_logging()
 
     # references_images = sorted([str(p.relative_to(paths['db_color_folder'])) for p in (paths['db_color_folder']).glob('*.png')])
-    references_images = sorted([str(p.relative_to(paths['db_color_folder'])) for p in (paths['db_color_folder']).glob('*.png')])
+    references_images = sorted([str(p.relative_to(paths['db_color_folder'])) for p in (paths['db_color_folder']).glob('*.jpg')])
     print(len(references_images), "mapping images")
 
-    extract_features.main(conf=convert_to_dict(cfg.EXTRACTOR),
-                          root_folder=paths['db_color_folder'],
-                          output_dir=paths['db_descriptor_folder'],
-                          resize=[1024],
-                          file_ext='.png')
+    # extract_features.main(conf=convert_to_dict(cfg.EXTRACTOR),
+    #                       root_folder=paths['db_color_folder'],
+    #                       output_dir=paths['db_descriptor_folder'],
+    #                       resize=[960],
+    #                       file_ext='.jpg')
 
     #### Exhaustive ####
-    pairs_from_exhaustive.main(output_txt=paths['db_retrieval_filepath_txt'],
-                               output_dict=paths['db_retrieval_filepath_dict'],
-                               image_list=references_images,
-                               ref_list=None)  # None for self_matching, for reconstruction
+    #pairs_from_exhaustive.main(output_txt=paths['db_retrieval_filepath_txt'],
+    #                           output_dict=paths['db_retrieval_filepath_dict'],
+    #                           image_list=references_images,
+    #                           ref_list=None)  # None for self_matching, for reconstruction
 
     #### Visual DB ####
-    build_visual_db.main(db_descriptor_folder=paths['db_descriptor_folder'],
-                         visual_db_folder=paths['visual_db_folder'])
+    # build_visual_db.main(db_descriptor_folder=paths['db_descriptor_folder'],
+    #                      visual_db_folder=paths['visual_db_folder'])
 
-    pairs_from_retrieval.main(db_root_folder=paths['db_color_folder'],
-                              visual_db_folder=paths['visual_db_folder'],
-                              query_root_folder=paths['db_root_folder'],
-                              query_image_dir=paths['db_color_folder'],
-                              query_descriptor_folder=paths['db_descriptor_folder'],
-                              query_retrieval_filepath_txt=paths['db_retrieval_filepath_txt'],
-                              k=40)
+    # pairs_from_retrieval.main(db_root_folder=paths['db_color_folder'],
+    #                           visual_db_folder=paths['visual_db_folder'],
+    #                           query_root_folder=paths['db_root_folder'],
+    #                           query_image_dir=paths['db_color_folder'],
+    #                           query_descriptor_folder=paths['db_descriptor_folder'],
+    #                           query_retrieval_filepath_txt=paths['db_retrieval_filepath_txt'],
+    #                           k=40)
 
-    match_features.main(conf=convert_to_dict(cfg.MATCHER),
-                        input_pairs=paths['db_retrieval_filepath_txt'],
-                        db_descriptor_prefix=paths['db_descriptor_folder'],
-                        query_descriptor_prefix=paths['db_descriptor_folder'],
-                        output_dir=paths['db_matches_folder'],  # query_matches_folder
-                        args=argparse.Namespace(starting_index=0, ending_index=-1, viz=False, eval=False, cache=False,
-                                                viz_extension='png'),
-                        gpu_list=[0,1],
-                        num_proc_per_gpu=[1,1])
+    # match_features.main(conf=convert_to_dict(cfg.MATCHER),
+    #                     input_pairs=paths['db_retrieval_filepath_txt'],
+    #                     db_descriptor_prefix=paths['db_descriptor_folder'],
+    #                     query_descriptor_prefix=paths['db_descriptor_folder'],
+    #                     output_dir=paths['db_matches_folder'],  # query_matches_folder
+    #                     args=argparse.Namespace(starting_index=0, ending_index=-1, viz=False, eval=False, cache=False,
+    #                                             viz_extension='png'),
+    #                     gpu_list=[0],
+    #                     num_proc_per_gpu=[1])
 
     reconstruction.main(sfm_dir=paths['sfm_superpoint_superglue'],
                         image_dir=paths['db_color_folder'],

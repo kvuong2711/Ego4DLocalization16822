@@ -40,7 +40,7 @@ def query_from_db(db_root_folder, visual_db_folder, query_root_folder, query_ima
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
     # for visualization
-    db_images_names = sorted(fnmatch.filter(os.listdir(db_root_folder), '*.png'))
+    db_images_names = sorted(fnmatch.filter(os.listdir(db_root_folder), '*.jpg'))   # TODO: ext .png
 
     logger.info('Query image with database images')
     # match_pair = {'db': [], 'query': []}

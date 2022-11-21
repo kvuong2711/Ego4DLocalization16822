@@ -1,6 +1,6 @@
 PATH:
-  PROCESSED_DB: '/mnt/storage/khiem_storage/ilim_data/processed_data/fifthcraig_grace/database'
-  PROCESSED_QUERY: '/mnt/storage/khiem_storage/ilim_data/processed_data/fifthcraig_grace/query'
+  PROCESSED_DB: '/mnt/pixel/ego4d_data/16822_data/0056_01/000'
+  PROCESSED_QUERY: '/mnt/pixel/ego4d_data/16822_data/0056_01/000'
 
 VDB_BUILDER:
   output: 'exhaustive'
